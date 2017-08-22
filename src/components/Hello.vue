@@ -1,45 +1,56 @@
 <template>
-  <div class="hello">
-  
-    <div class="col-lg-3">
+  <div class="container">
+    <Book></Book>
+    <div class="col-lg-3" v-for="room in roomDetails">
       <div class="panel panel-primary">
-        <div class="panel-heading">Mub
-          <span class="badge pull-right"> 1 </span>
+        <div class="panel-heading">{{ room.full_name }}
+          <span class="badge pull-right"> {{ room.room_number }} </span>
         </div>
         <div class="panel-body">
-          <kbd>2</kbd> People
-          <kbd> 1</kbd> Kids
+          <kbd>{{ room.people }} </kbd> People
+          <kbd> {{ room.kids }}</kbd> Kids
           <br>
           <br>
-          <kbd>Suit</kbd>
+          <kbd>{{ room.room_type }}</kbd>
           <button type="button" class="btn btn-danger pull-right" data-toggle="modal" data-target=".bd-example-modal-sm">Delete</button>
         </div>
         <div class="panel-footer">
           <h4>
-
-            <CountdownTimer class="pull left" date="August 22, 2017"></CountdownTimer>
+            <CountdownTimer :date="room.time"></CountdownTimer>
           </h4>
         </div>
       </div>
     </div>
-
-
-    
   
   </div>
 </template>
 
 <script>
 import CountdownTimer from './Timer.vue'
+import Book from './book.vue'
+import axios from 'axios'
+
 export default {
   name: 'hello',
   data() {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+      roomDetails: []
     }
   },
   components: {
-    CountdownTimer
+    CountdownTimer,
+    Book
+  }, created() {
+    axios.get('http://localhost:3000/rooms')
+      .then((response) => {
+        this.roomDetails = response.data;
+        console.log(response);
+      })
+      .catch((error) => {
+        consol.log(error);
+      })
+
   }
 }
 </script>
