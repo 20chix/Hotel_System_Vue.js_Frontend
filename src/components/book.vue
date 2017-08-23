@@ -115,6 +115,7 @@ export default {
             axios.post('http://localhost:3000/rooms', newRoom)
                 .then((response) => {
                     console.log(response);
+      window.location.reload();
                 })
                 .catch((error) => {
                     consol.log(error);

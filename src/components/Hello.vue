@@ -1,7 +1,8 @@
 <template>
   <div class="container">
     <Book></Book>
-    <div class="col-lg-3" v-for="room in roomDetails">
+    <br>
+    <div class="col-lg-3" v-for="room  in roomDetails">
       <div class="panel panel-primary">
         <div class="panel-heading">{{ room.full_name }}
           <span class="badge pull-right"> {{ room.room_number }} </span>
@@ -12,7 +13,7 @@
           <br>
           <br>
           <kbd>{{ room.room_type }}</kbd>
-          <button type="button" class="btn btn-danger pull-right" data-toggle="modal" data-target=".bd-example-modal-sm">Delete</button>
+          <button type="button" class="btn btn-danger pull-right" data-toggle="modal" data-target=".bd-example-modal-sm" @click="DELETE(room, room._id)">Delete</button>
         </div>
         <div class="panel-footer">
           <h4>
@@ -21,6 +22,30 @@
         </div>
       </div>
     </div>
+  
+    <div class="modal fade bd-example-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title" id="exampleModalLabel">Are you sure?</h1>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to delete this room? </div>
+          <div class="modal-footer">
+  
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <router-link to="/">
+              <button type="button" class="btn btn-danger" @click="deleteData(test_room, test_id)">Delete</button>
+            </router-link>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- @click="deleteData(room, room._id)" -->
   
   </div>
 </template>
@@ -35,12 +60,35 @@ export default {
   data() {
     return {
       msg: 'Welcome to Your Vue.js App',
-      roomDetails: []
+      roomDetails: [],
+      test_room: {},
+      test_id: ''
     }
   },
   components: {
     CountdownTimer,
-    Book
+    Book,
+  },
+
+  methods: {
+
+    DELETE(roomDetails1, id1) {
+      $("#my-modal").modal('show');
+      this.test_room = roomDetails1;
+      this.test_id = id1;
+
+    },
+    deleteData(roomDetails, id) {
+
+      axios.delete('http://localhost:3000/rooms/' + id)
+        .then(response => this.roomDetails.splice(index, 1));
+
+      window.location.reload();
+    }
+
+
+
+
   }, created() {
     axios.get('http://localhost:3000/rooms')
       .then((response) => {
