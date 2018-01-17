@@ -93,10 +93,11 @@ export default {
     axios.get('http://localhost:3000/rooms')
       .then((response) => {
         this.roomDetails = response.data;
-        console.log(response);
+        
+        e.log(response);
       })
       .catch((error) => {
-        consol.log(error);
+        console.log(error);
       })
 
   }
